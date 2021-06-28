@@ -3,24 +3,22 @@
 \encoding{UTF-8}
 \name{sem_checker_plot}
 \alias{sem_checker_plot}
-\title{Creates a psem object based on an adjacency matrix}
+\title{Plots the assumptions of linear equations}
 \usage{
-sem_checker_plot(x)
+sem_checker_plot(x, spatial=FALSE, what=1)
 }
 \arguments{
 \item{x}{a data.frame}
 
-\item{spatial}{logical evaluate spatial autocorrelation}
+\item{spatial}{logical if TRUE evaluate spatial autocorrelation}
 
-\item{what}{define the regression to be evaluated}
+\item{what}{choose the regression to be evaluated}
 }
 \value{
 a plot
 }
 \description{
-This functions creates a piecewise SEM based on two objects: a matrix
-describing how variables are related to each other and a data.frame
-containing the observed variables data.
+This functions plots the result of sem_checker.
 }
 \examples{
 \donttest{

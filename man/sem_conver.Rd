@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{sem_conver}
 \alias{sem_conver}
-\title{SEM Direct, Indirect and Total Effects}
+\title{SEM Conversion}
 \usage{
 sem_conver(sem=mod)
 }

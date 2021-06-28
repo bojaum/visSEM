@@ -3,9 +3,9 @@
 \encoding{UTF-8}
 \name{sem_checker}
 \alias{sem_checker}
-\title{Creates a psem object based on an adjacency matrix}
+\title{Checks the assumptions of each linear equation of a SEM}
 \usage{
-sem_checker(x, dat, spatial=FALSE, coord=c("long", "lat"))
+sem_checker(x, dat, spatial=FALSE, coord=c("lon", "lat"))
 }
 \arguments{
 \item{x}{a square matrix containing the variables relationships}
@@ -17,12 +17,12 @@ sem_checker(x, dat, spatial=FALSE, coord=c("long", "lat"))
 \item{coord}{a character with geographic coordinates column names}
 }
 \value{
-a piecewise object
+a list with original dataset and assumptions tests
 }
 \description{
-This functions creates a piecewise SEM based on two objects: a matrix
-describing how variables are related to each other and a data.frame
-containing the observed variables data.
+This functions extracts the residuals of each linear equation and evaluates
+the assumptions of homoscedasticity, normality, spatial autocorrelation and
+multicolinearity
 }
 \examples{
 \donttest{

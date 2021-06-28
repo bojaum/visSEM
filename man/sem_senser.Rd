@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{sem_senser}
 \alias{sem_senser}
-\title{SEM Direct, Indirect and Total Effects}
+\title{SEM sensivity analysis}
 \usage{
 sem_senser(x=NULL, dat=NULL, var.name=NULL, group=NULL, layout=NULL)
 }

@@ -3,7 +3,7 @@
 \encoding{UTF-8}
 \name{sem_plotter}
 \alias{sem_plotter}
-\title{SEM Plot}
+\title{SEM interactable Plot}
 \usage{
 sem_plotter(sem, layout, ...)
 }
