@@ -64,7 +64,7 @@ sem_guesser(sem=mod)
 #### You can customize your interactive SEM:
 ```{r}
 cols<-c("#FF0000", "#80FF00", "#00FFFF", "#8000FF")
-sem_plotter(sem=mod, layout=NULL, vertex.color=cols, p.color=c("black", "red"))$vis
+sem_plotter(sem=mod, layout=mat2, vertex.color=cols, p.color=c("black", "red"))$vis
 ```
 
 #### You can calculate direct and indirect effects using sem_ditter
@@ -90,7 +90,7 @@ print(adj2)
 
 #Data.frame
 data(keeley)
-dat<-keeley
+#dat<-keeley
 
 m1<-sem_thinker(x=adj, dat=keeley)
 m2<-sem_thinker(x=adj2, dat=keeley)
@@ -111,4 +111,43 @@ plot(static, layout=mat1) #using layout 1 (ziz-zag)
 plot(static, layout=mat2) #using layout 2 (linear)
 ```
 
+#### Sometimes you may evaluate the robustness of the SEM when considering different groups or subsets of the data.
+##### Method "split" separates the dataset into multiple subsets and runs the piecewise SEM for each subset
+```{r}
+fac<-c(rep("A", 45), rep("B", 45))
+keeley$group<-as.factor(fac)
+mod <- psem(lm(rich ~ cover, data = keeley),
+            lm(cover ~ firesev, data = keeley),
+            lm(firesev ~ age, data = keeley),
+      data = keeley)
 
+
+sens1<-sem_senser(x=adj, dat=keeley, var.name="group", method="split", layout=mat1)
+sens2<-sem_senser(sem=mod, var.name="group", method="split", layout=mat1)
+```
+
+##### Method "multigroup" uses the group analysis function from piecewiseSEM package
+```{r}
+sens<-sem_senser(sem=mod, var.name="group", method="multigroup", layout=mat1)
+print(sens)
+```
+
+#### Group A
+```{r}
+sens2$vis[[1]]
+```
+
+#### Group B
+```{r}
+sens2$vis[[2]]
+```
+
+#### Checking for assumptions of the linear equations
+```{r}
+lon<-rnorm(90)
+lat<-rnorm(90)
+spatial.keeley<-cbind(keeley, lon, lat)
+assump<-sem_checker(x=adj2, dat=spatial.keeley, spatial=T, coord=c("lon", "lat"))
+
+sem_checker_plot(assump, spatial=T, what=1)
+```
