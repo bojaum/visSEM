@@ -4,9 +4,11 @@
 #' describing how variables are related to each other and a data.frame
 #' containing the observed variables data.
 #'
-#' @usage sem_thinker(x, dat)
+#' @usage sem_checker(x, dat, spatial=FALSE, coord=c("long", "lat"))
 #' @param x a square matrix containing the variables relationships
 #' @param dat a data.frame containing the measured variables
+#' @param spatial logical evaluate spatial autocorrelation?
+#' @param coord a character with geographic coordinates column names
 #' @return a piecewise object
 #' @examples
 #' \donttest{
@@ -19,17 +21,17 @@
 #' rownames(mat)<-c("cover", "firesev", "age", "rich")
 #'
 #' #Creates the psem object based on the matrix
-#' sem_thinker(x=mat, dat=keeley)
+#' sem_checker(x=mat, dat=keeley, spatial=F)
 #'
 #' ##End
 #' }
 #' @keywords sem
 #' @encoding UTF-8
 #' @author Anderson Medina
-#' @export sem_thinker
+#' @export sem_checker
 
 
-sem_thinker<-function(x, dat){
+sem_checker<-function(x, dat, spatial=FALSE, coord=c("lon", "lat")){
 
   if (class(x)[1]!="matrix"){
     stop("Argument x must be a matrix object")
@@ -37,6 +39,23 @@ sem_thinker<-function(x, dat){
 
   if (class(dat)!="data.frame"){
     stop("Argument dat must be a data.frame object")
+  }
+  lon<-NA
+  lat<-NA
+  if (spatial==TRUE){
+    lon<-dat[,coord[1]]
+    lat<-dat[,coord[2]]
+    if (class(coord)!="character"){
+      stop("Argument coord must be a character")
+    }
+
+    if (length(coord)!=2){
+      stop("Argument coord must have two variables")
+    }
+    x.col<-intersect(coord==colnames(dat))
+    if (length(x.col)==2){
+      stop("coord variables must be on the dataset")
+    }
   }
 
   xisto<<-dat #GAMBIARRA
@@ -61,7 +80,15 @@ sem_thinker<-function(x, dat){
   equ<-paste0("equ", 1:n.equ)
   ml<-list()
 
+  res<-list()
+  tes<-list()
+  out<-list(residuals=NULL, tests=NULL)
+
   for (i in 1:n.equ){
+
+    test<-list(norm=NULL, homo=NULL, mult=NULL)
+    tes[[i]]<-test
+
     temp.vars<-subset(vars, to==resp[i])
     response<-paste0(temp.vars[,1], collpase="+")
     response<-substr(response, 1, nchar(response)-1)
@@ -74,14 +101,21 @@ sem_thinker<-function(x, dat){
     #m<-lm(cover~rich, dat)
     ml[[i]]<-m
     names(ml)[i]<-text
-
+    k<-qqnorm(m$residuals)
+    res[[i]]<-data.frame(x=lon, y=lat, fit=m$fitted.values, quant=k$x, res=m$residuals)
+    tes[[i]][[1]]<-stats::shapiro.test(m$residuals)
+    tes[[i]][[2]]<-car::ncvTest(m)
+    if (length(response)>1){
+      tes[[i]][[3]]<-car::vif(m)
+    }
 
   }
+  names(res)<-resp
+  names(tes)<-resp
+  out[[1]]<-res
+  out[[2]]<-tes
 
-  ps<-piecewiseSEM:::formatpsem(ml)
-  class(ps)<-"psem"
 
-  return(ps)
+  return(out)
 }
-
 

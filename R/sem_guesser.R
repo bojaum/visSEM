@@ -27,7 +27,7 @@
 #' @keywords sem
 #' @encoding UTF-8
 #' @author Anderson Medina
-#' @export sem_layouter
+#' @export sem_guesser
 
 
 sem_guesser<-function(sem){
