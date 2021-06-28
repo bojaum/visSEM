@@ -1,13 +1,11 @@
-#' Creates a psem object based on an adjacency matrix
+#' Plots the assumptions of linear equations
 #'
-#' This functions creates a piecewise SEM based on two objects: a matrix
-#' describing how variables are related to each other and a data.frame
-#' containing the observed variables data.
+#' This functions plots the result of sem_checker.
 #'
-#' @usage sem_checker_plot(x)
+#' @usage sem_checker_plot(x, spatial=FALSE, what=1)
 #' @param x a data.frame
-#' @param spatial logical evaluate spatial autocorrelation
-#' @param what define the regression to be evaluated
+#' @param spatial logical if TRUE evaluate spatial autocorrelation
+#' @param what choose the regression to be evaluated
 #' @return a plot
 #' @examples
 #' \donttest{
@@ -39,6 +37,10 @@ sem_checker_plot<-function(x, spatial=FALSE, what=1){
 
   if (length(x)!=2){
     stop("Argument x must have two elements")
+  }
+
+  if (what>length(x[[2]])){
+    stop("Argument what must be the position of the equation")
   }
 
   w<-x[[1]][[what]]

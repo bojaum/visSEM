@@ -1,4 +1,4 @@
-#' SEM Plot
+#' SEM interactable Plot
 #'
 #' Plots a structural equation model using a psem object created with the
 #' \code{piecewise} package.

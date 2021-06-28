@@ -1,4 +1,4 @@
-#' SEM Direct, Indirect and Total Effects
+#' SEM sensivity analysis
 #'
 #' Visual inspection of the sensibility of the SEM to different groups found
 #' on the dataset.
@@ -91,8 +91,8 @@ sem_senser<-function(x=NULL, dat=NULL, sem=NULL, var.name=NULL,
     n.split<-list()
     adj<-sem_conver(sem)
     for (i in 1:f){
-      s.split[[i]]<-visSEM::sem_thinker(x=adj, dat=d.split[[i]], layout=layout)
-      n.split[[i]]<-sem_plotter(sem=s.split[[i]])$vis
+      s.split[[i]]<-visSEM::sem_thinker(x=adj, dat=d.split[[i]])
+      n.split[[i]]<-sem_plotter(sem=s.split[[i]], layout=layout)$vis
     }
     names(s.split)<-fac.n
     names(n.split)<-fac.n

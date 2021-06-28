@@ -1,15 +1,15 @@
-#' Creates a psem object based on an adjacency matrix
+#' Checks the assumptions of each linear equation of a SEM
 #'
-#' This functions creates a piecewise SEM based on two objects: a matrix
-#' describing how variables are related to each other and a data.frame
-#' containing the observed variables data.
+#' This functions extracts the residuals of each linear equation and evaluates
+#' the assumptions of homoscedasticity, normality, spatial autocorrelation and
+#' multicolinearity
 #'
-#' @usage sem_checker(x, dat, spatial=FALSE, coord=c("long", "lat"))
+#' @usage sem_checker(x, dat, spatial=FALSE, coord=c("lon", "lat"))
 #' @param x a square matrix containing the variables relationships
 #' @param dat a data.frame containing the measured variables
 #' @param spatial logical evaluate spatial autocorrelation?
 #' @param coord a character with geographic coordinates column names
-#' @return a piecewise object
+#' @return a list with original dataset and assumptions tests
 #' @examples
 #' \donttest{
 #' ## Not run:
@@ -43,8 +43,6 @@ sem_checker<-function(x, dat, spatial=FALSE, coord=c("lon", "lat")){
   lon<-NA
   lat<-NA
   if (spatial==TRUE){
-    lon<-dat[,coord[1]]
-    lat<-dat[,coord[2]]
     if (class(coord)!="character"){
       stop("Argument coord must be a character")
     }
@@ -52,11 +50,14 @@ sem_checker<-function(x, dat, spatial=FALSE, coord=c("lon", "lat")){
     if (length(coord)!=2){
       stop("Argument coord must have two variables")
     }
-    x.col<-intersect(coord==colnames(dat))
-    if (length(x.col)==2){
+    x.col<-intersect(coord, colnames(dat))
+    if (length(x.col)!=2){
       stop("coord variables must be on the dataset")
     }
+    lon<-dat[,coord[1]]
+    lat<-dat[,coord[2]]
   }
+
 
   xisto<<-dat #GAMBIARRA
 
@@ -101,7 +102,7 @@ sem_checker<-function(x, dat, spatial=FALSE, coord=c("lon", "lat")){
     #m<-lm(cover~rich, dat)
     ml[[i]]<-m
     names(ml)[i]<-text
-    k<-qqnorm(m$residuals)
+    k<-qqnorm(m$residuals, plot.it = F)
     res[[i]]<-data.frame(x=lon, y=lat, fit=m$fitted.values, quant=k$x, res=m$residuals)
     tes[[i]][[1]]<-stats::shapiro.test(m$residuals)
     tes[[i]][[2]]<-car::ncvTest(m)

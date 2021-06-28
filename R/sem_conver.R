@@ -1,4 +1,4 @@
-#' SEM Direct, Indirect and Total Effects
+#' SEM Conversion
 #'
 #' Converts a psem objet to a binary adjacency matrix
 #' @usage sem_conver(sem=mod)
