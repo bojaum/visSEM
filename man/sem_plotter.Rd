@@ -5,10 +5,12 @@
 \alias{sem_plotter}
 \title{SEM interactable Plot}
 \usage{
-sem_plotter(sem, layout, ...)
+sem_plotter(sem, stand, layout, ...)
 }
 \arguments{
 \item{sem}{a psem object}
+
+\item{stand}{Logical if TRUE uses standardized betas if FALSE uses raw betas}
 
 \item{layout}{a coordinates matrix where each row is a variable}
 
