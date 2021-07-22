@@ -2,8 +2,9 @@
 #'
 #' Plots a structural equation model using a psem object created with the
 #' \code{piecewise} package.
-#' @usage sem_plotter(sem, layout, ...)
+#' @usage sem_plotter(sem, stand, layout, ...)
 #' @param sem a psem object
+#' @param stand Logical if TRUE uses standardized betas if FALSE uses raw betas
 #' @param layout a coordinates matrix where each row is a variable
 #' @param option a character vector of the type of graph. "full" plots paths
 #' and correlated errors, "pred" omits correlated errors and "corr" plots only
@@ -38,7 +39,7 @@
 #' @export sem_plotter
 
 
-sem_plotter<-function(sem, layout=NULL, option="full", vertex.label=NULL,
+sem_plotter<-function(sem, stand=TRUE, layout=NULL, option="full", vertex.label=NULL,
                       vertex.color="grey", p.color=c("blue", "red"),
                       c.color=c("darkgray"), vertex.shape="rectangle",
                       vertex.size=35, vertex.size2=15,
@@ -68,13 +69,17 @@ sem_plotter<-function(sem, layout=NULL, option="full", vertex.label=NULL,
     stop("Only one color is required in the c.color argument")
   }
 
+  if (!isLogical(stand)){
+    stop("stand must be a LOGICAL vector")
+  }
 
+  s<-ifelse(stand==TRUE, 8, 3)
 
   betas<-coefs(sem)
   ncorel<-grep("~~", betas$Response, invert=T)
   corel<-grep("~~", betas$Response)
 
-  st.betas<-betas[ncorel,c(2,1,8,7)]
+  st.betas<-betas[ncorel,c(2,1,s,7)]
   p1<-st.betas[,4]<0.05
   st.betas<-st.betas[,1:3]
 

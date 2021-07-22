@@ -69,14 +69,6 @@ sem_checker_plot<-function(x, spatial=FALSE, what=1){
                  round(homo[[4]], 2), "; p = ",
                  round(homo[[5]], 3))
 
-  t.mult<-NULL
-  if(!is.null(mult)){
-    for (i in 1:length(mult)){
-      t.mult<-paste0(t.mult, names(mult)[i]," ", round(mult[i], 2), "\n")
-    }
-  }
-
-
   par(mfrow = c(2, 2))
   #1
   plot(w$fit, w$res, main=t.homo,
@@ -99,11 +91,17 @@ sem_checker_plot<-function(x, spatial=FALSE, what=1){
   }
 
   #4
-  plot(NULL, main="Multicolinearity:\n VIF",
-       xlim=c(0,1), ylim=c(0,1),
-       xlab="", ylab="", bty="n", axes=F)
-  text(0.8, .8, t.mult)
-
+  if(!is.null(mult)){
+  xmax<-max(10, mult)
+  barplot(mult, main="Multicolinearity:",
+          bty="l", ylim=c(0, xmax),
+          xlab="Variables", ylab="VIF")
+  box(bty="l")
+  }else {
+    plot(NULL, main="Multicolinearity:",
+         xlim=c(0,1), ylim=c(0,1),
+         xlab="", ylab="", bty="n", axes=F)
+  }
 
   #return(res)
 }
