@@ -69,7 +69,8 @@ sem_plotter<-function(sem, stand=TRUE, layout=NULL, option="full", vertex.label=
     stop("Only one color is required in the c.color argument")
   }
 
-  if (!isLogical(stand)){
+  stand<-as.logical(stand)
+  if (!is.logical(stand)){
     stop("stand must be a LOGICAL vector")
   }
 
