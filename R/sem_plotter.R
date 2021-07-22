@@ -83,6 +83,7 @@ sem_plotter<-function(sem, stand=TRUE, layout=NULL, option="full", vertex.label=
   st.betas<-betas[ncorel,c(2,1,s,7)]
   p1<-st.betas[,4]<0.05
   st.betas<-st.betas[,1:3]
+  colnames(st.betas)[3]<-"Std.Estimate"
 
   st.cor<-betas[corel,c(2,1,8,7)]
   p2<-st.cor[,4]<0.05
